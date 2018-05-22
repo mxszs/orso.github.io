@@ -14,8 +14,8 @@
 	<body>
 		<div id="app" class="main">
 			<header class="bar bar-nav">
-				<a @click="isShowselet = !isShowselet" class="icon icon-code pull-left"></a>
-				<a @click="isShowNew=true" class="icon icon-edit pull-right"></a>
+				<a @click="isShowselet = !isShowselet" class="icon icon-code pull-left cursor-con"></a>
+				<a @click="isShowNew=true" class="icon icon-edit pull-right cursor-con"></a>
 				<div class="title"> <span>memorandum-{{showTodo.length}}</span></div>
 				<button @click="all" class="button button-success allx icon icon-check" :class="{hidden:!isShowselet,'button-fill':isfill}"></button>
 			</header>
