@@ -1,6 +1,13 @@
-
-#app {
+body{
 	width: 700px;
+	margin: 100px auto;
+	min-height: 800px;
+}
+#app {
+	min-height: 800px;
+    background: url(../image/so.jpg);
+    width: 700px;
+    padding: 20px;
 }
 .card-content-inner {
 	width: 80%;
