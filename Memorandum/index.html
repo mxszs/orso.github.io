@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Todolist</title>
+		<title>or_so memorandum</title>
 		<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.css">
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<link rel="shortcut icon" href="/favicon.ico">
@@ -14,9 +14,9 @@
 	<body>
 		<div id="app" class="main">
 			<header class="bar bar-nav">
-				<a @click="isShowselet = !isShowselet" class="icon icon-code pull-left"></a>
-				<a @click="isShowNew=true" class="icon icon-edit pull-right"></a>
-				<div class="title"> <span>ToDoList-{{showTodo.length}}</span></div>
+				<a @click="isShowselet = !isShowselet" class="icon icon-code pull-left cursor-con"></a>
+				<a @click="isShowNew=true" class="icon icon-edit pull-right cursor-con"></a>
+				<div class="title"> <span>memorandum-{{showTodo.length === 0 ? 0 : showTodo.length}}</span></div>
 				<button @click="all" class="button button-success allx icon icon-check" :class="{hidden:!isShowselet,'button-fill':isfill}"></button>
 			</header>
 			<div class="content">

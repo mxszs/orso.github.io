@@ -3,7 +3,7 @@ new Vue({
 
 	data: {
 		xx: JSON.parse(localStorage.todo ? localStorage.todo : '[]').length,
-		todo: JSON.parse(localStorage.todo ? localStorage.todo : '[]'),
+		todo: JSON.parse(localStorage.todo ? localStorage.todo : [{new: "chenpig", isFinished: false, isShowseleted: false, id: 1}]),
 		showType: "all",
 		types: [{
 			type: "all",

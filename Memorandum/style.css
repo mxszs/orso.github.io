@@ -7,13 +7,14 @@ body{
 	min-height: 800px;
     background: url(../image/so.jpg);
     width: 700px;
-    padding: 20px;
 }
 .card-content-inner {
 	width: 80%;
 	height: 5rem;
 }
-
+.cursor-con {
+	cursor: pointer;
+}
 .allx {
 	padding: 0 !important;
 	margin-left: 2rem;
@@ -45,6 +46,7 @@ body{
 
 .finished {
 	border: 1px solid rgb(42, 218, 56);
+	cursor: pointer;
 }
 
 .wwc {
@@ -94,6 +96,7 @@ body{
 	width: 2rem;
 	height: 2rem;
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .all {
@@ -101,6 +104,7 @@ body{
 	height: 2rem;
 	border: 1px solid rgb(21, 104, 212);
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .fin {
@@ -108,6 +112,7 @@ body{
 	height: 2rem;
 	border: 1px solid greenyellow;
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .unfin {
@@ -115,6 +120,7 @@ body{
 	height: 2rem;
 	border: 1px solid pink;
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .fin.active {
@@ -148,7 +154,7 @@ body{
 
 .insert-box {
 	width: 70%;
-	height: 15rem;
+	height: 18rem;
 	background: #fff;
 	border-radius: 0.5rem;
 	display: flex;
@@ -192,4 +198,5 @@ body{
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
+	cursor: pointer;
 }
