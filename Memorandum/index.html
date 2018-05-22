@@ -16,12 +16,12 @@
 			<header class="bar bar-nav">
 				<a @click="isShowselet = !isShowselet" class="icon icon-code pull-left"></a>
 				<a @click="isShowNew=true" class="icon icon-edit pull-right"></a>
-				<div class="title"> <span>memorandum-{{showTodo.length === 0 ？ "" : showTodo.length}}</span></div>
+				<div class="title"> <span>memorandum-{{showTodo.length}}</span></div>
 				<button @click="all" class="button button-success allx icon icon-check" :class="{hidden:!isShowselet,'button-fill':isfill}"></button>
 			</header>
 			<div class="content">
 
-				<p v-if="showTodo.length==0">你还没有添加任何消息</p>
+				<p v-if="showTodo.length==0">请添加一个 memorandum</p>
 				<div v-for="item in showTodo" class="card" :class="{finished:item.isFinished,seclet:isShowselet,users:!isShowselet}" :key="item.id">
 
 					<div class="card-content todo-card">
@@ -75,6 +75,7 @@
 
 			</div>
 		</div>
+		<a href="/2018/05/21/hello-world/" class="next">返回</a>
 		<script src="vue.js" type="text/javascript" charset="utf-8"></script>
 		<script src="index.js" type="text/javascript" charset="utf-8"></script>
 	</body>
