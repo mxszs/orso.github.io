@@ -1,4 +1,7 @@
 
+#app {
+	width: 700px;
+}
 .card-content-inner {
 	width: 80%;
 	height: 5rem;
