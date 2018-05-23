@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/05/23/react%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6/</loc>
+    
+    <lastmod>2018-05-23T10:09:39.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2018/05/23/dva/</loc>
     
     <lastmod>2018-05-23T03:43:54.000Z</lastmod>
