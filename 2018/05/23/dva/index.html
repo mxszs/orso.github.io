@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> dva · or_so</title><meta name="description" content="dva - or_so"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="or_so"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://www.cnblogs.com/mxs-blog/" target="_blank" class="nav-list-link">随笔</a></li><li class="nav-list-item"><a href="https://github.com/mxszs" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">dva</h1><div class="post-info">May 23, 2018</div><div class="post-content"><!-- // 百度统计 -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ccc9fee7608be2c23f25111be03d20fe";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+<p>dva 我认为可以理解为对redux的一种封装</p>
+<blockquote>
+<p>redux 的工作流程图， 更容易去理解dva中的model</p>
+</blockquote>
+<p><img src="../../../../image/redux.jpg" alt="redux.jpg"></p>
+<h2 id="安装dva-cli"><a href="#安装dva-cli" class="headerlink" title="安装dva-cli"></a>安装dva-cli</h2><p>dva 有自己的脚手架，在开发项目的时候，我们需要先安装一个脚手架</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$ npm install -g dva-cli</span><br></pre></td></tr></table></figure>
+<p>安装完成后，可以通过 dva -v 查看版本</p>
+<h2 id="创建新应用"><a href="#创建新应用" class="headerlink" title="创建新应用"></a>创建新应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. dva new myApp </span><br><span class="line">2. cd myApp</span><br><span class="line">3. npm install</span><br><span class="line">4. npm start</span><br></pre></td></tr></table></figure>
+<p>（DVA）定义组件一般有三种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 1. 传统写法</span><br><span class="line">const App = React.createClass(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">// 2. es6 的写法</span><br><span class="line">class App extends React.Component(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">// 3. stateless 的写法（函数的写法，但是不会调用react 的生命周期）</span><br><span class="line">const App = (props) =&gt; (&#123;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>其中第1种是不推荐的写法，第2种是在你的组件涉及 react 的生命周期方法的时候采用这种写法(可以使用this)，而第3种则是我们一般推荐的写法。</p>
+<h2 id="初始化dva"><a href="#初始化dva" class="headerlink" title="初始化dva"></a>初始化dva</h2><p><img src="../../../../image/dvainstall.png" alt="dvainstall.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">app = dva(opts)</span><br><span class="line"></span><br><span class="line">创建应用，返回 dva 实例</span><br><span class="line"></span><br><span class="line">opts 包含：</span><br><span class="line"></span><br><span class="line">history：指定给路由用的 history，默认是 hashHistory</span><br><span class="line">initialState：指定初始数据，优先级高于 model 中的 state，默认是 &#123;&#125;</span><br><span class="line">如果要配置 history 为 browserHistory，可以这样：</span><br><span class="line"></span><br><span class="line">import createHistory from &apos;history/createBrowserHistory&apos;;</span><br><span class="line">const app = dva(&#123;</span><br><span class="line">  history: createHistory(),</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const app = dva(&#123;</span><br><span class="line">  history,</span><br><span class="line">  initialState,</span><br><span class="line">  onError,</span><br><span class="line">  onAction,</span><br><span class="line">  onStateChange,</span><br><span class="line">  onReducer,</span><br><span class="line">  onEffect,</span><br><span class="line">  onHmr,</span><br><span class="line">  extraReducers,</span><br><span class="line">  extraEnhancers,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="定义-Model"><a href="#定义-Model" class="headerlink" title="定义 Model"></a>定义 Model</h2><p>model 是 dva 中最重要的概念</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">app.model(&#123;</span><br><span class="line">  namespace: &apos;todo&apos;, //  model 的命名空间，同时也是他在全局 state 上的属性，只能用字符串，不支持通过 . 的方式创建多层命名空间</span><br><span class="line"></span><br><span class="line">  state: [], // 初始值，优先级低于传给 dva() 的 opts.initialState。</span><br><span class="line">   // const app = dva(&#123;</span><br><span class="line">   //     initialState: &#123; count: 1 &#125;,</span><br><span class="line">   //  &#125;);</span><br><span class="line">   // app.model(&#123;</span><br><span class="line">   //     namespace: &apos;count&apos;,</span><br><span class="line">   //     state: 0,</span><br><span class="line">   // &#125;); </span><br><span class="line">   // state.count 为 1</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">  reducers: &#123; // 以 key/value 格式定义 reducer。用于处理同步操作，唯一可以修改 state 的地方。由 action 触发</span><br><span class="line">    add(state, &#123; payload: todo &#125;) &#123;</span><br><span class="line">      // 保存数据到 state</span><br><span class="line">      return [...state, todo];</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  effects: &#123;</span><br><span class="line">    *save(&#123; payload: todo &#125;, &#123; put, call &#125;) &#123;</span><br><span class="line">      // 调用 saveTodoToServer，成功后触发 `add` action 保存到 state</span><br><span class="line">      yield call(saveTodoToServer, todo);</span><br><span class="line">      yield put(&#123; type: &apos;add&apos;, payload: todo &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  // 以 key/value 格式定义 effect。用于处理异步操作和业务逻辑，不直接修改 state。由 action 触发，可以触发 action，可以和服务器交互，可以获取全局 state 的数据等等。</span><br><span class="line"></span><br><span class="line">// 格式为 *(action, effects) =&gt; void 或 [*(action, effects) =&gt; void, &#123; type &#125;]</span><br><span class="line"></span><br><span class="line">  subscriptions: &#123;</span><br><span class="line">    setup(&#123; history, dispatch &#125;) &#123;</span><br><span class="line">      // 监听 history 变化，当进入 `/` 时触发 `load` action</span><br><span class="line">      return history.listen((&#123; pathname &#125;) =&gt; &#123;</span><br><span class="line">        if (pathname === &apos;/&apos;) &#123;</span><br><span class="line">          dispatch(&#123; type: &apos;load&apos; &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">// 以 key/value 格式定义 subscription。subscription 是订阅，用于订阅一个数据源，然后根据需要 dispatch 相应的 action。在 app.start() 时被执行，数据源可以是当前的时间、服务器的 websocket 连接、keyboard 输入、geolocation 变化、history 路由变化等等。</span><br><span class="line"></span><br><span class="line">// 格式为 (&#123; dispatch, history &#125;, done) =&gt; unlistenFunction。 </span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当我们使用put发送一条action的时候 与之对于的reducers就会接收到这个消息 然后在里面返回state等数据</p>
+<p>在reducers中尽量只做state的数据返回 不要在这里写相关的逻辑</p>
+<p>上面出现了 put call 这两个单词</p>
+<p>其实 不止这几个 </p>
+<p>一般常用的有put call select take </p>
+<ul>
+<li>put  用来发起一条action</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">用于触发action</span><br><span class="line">yield put(&#123; type: &apos;add&apos;, payload: todo &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>call 以异步的方式调用函数，用于异步逻辑，支持promise</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yield call(saveTodoToServer, todo);</span><br><span class="line"></span><br><span class="line">saveTodoToServer这里可以是一个请求</span><br><span class="line">export function saveTodoToServer(payload) &#123;</span><br><span class="line">  return axios.get(`xxx`);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>select 从state中获取相关的数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const todo = yield selecct(stete =&gt; state.count)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>take 获取发送的数据</li>
+</ul>
+<blockquote>
+<p>effects   接收数据</p>
+</blockquote>
+<p>dispatch 是根据你effects里面设置的type内容 然后转发到指定的model的 所以你这边 要设置正确以后 在model那边才能接收到你发送的这条action</p>
+<p>dispatch 在使用connect包裹的组件中可以通过 const { dispatch } =  this.props; 拿到</p>
+<p>当我们在页面中进行操作时，可以通过dispatch 分发这条action到model中</p>
+<p>具体的代码，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">save = (todo) =&gt;&#123;</span><br><span class="line">    if (todo !== &apos;&apos;) &#123;</span><br><span class="line">        dispath(&#123;type:&apos;count/save&apos;, plyload: todo&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个count就是在model中设置的namespace,save就是effects中你自己起的type<br>plyload是传过去的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">effects: &#123;</span><br><span class="line">    *save(&#123; payload: todo &#125;, &#123; put, call &#125;) &#123;</span><br><span class="line">      // 调用 saveTodoToServer，成功后触发 `add` action 保存到 state</span><br><span class="line">      yield call(saveTodoToServer, todo);</span><br><span class="line">      yield put(&#123; type: &apos;add&apos;, payload: todo &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>reducers 处理数据</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">reducers: &#123; </span><br><span class="line">    add(state, &#123; payload: todo &#125;) &#123;</span><br><span class="line">      // 保存数据到 state</span><br><span class="line">      return [...state, todo];</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>subscriptions 监听数据</p>
+</blockquote>
+<h1 id="react组件生命周期"><a href="#react组件生命周期" class="headerlink" title="react组件生命周期"></a>react组件生命周期</h1><p>组件的生命周期可分成三个状态：</p>
+<ul>
+<li>Mounting：已插入真实 DOM</li>
+<li>Updating：正在被重新渲染</li>
+<li>Unmounting：已移出真实 DOM<br>生命周期的方法有：</li>
+<li>componentWillMount 在渲染前调用,在客户端也在服务端。</li>
+<li>componentDidMount : 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过this.getDOMNode()来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用setTimeout, setInterval或者发送AJAX请求等操作(防止异部操作阻塞UI)。</li>
+<li>componentWillReceiveProps 在组件接收到一个新的prop时被调用。这个方法在初始化render时不会被调用。</li>
+<li>shouldComponentUpdate 返回一个布尔值。在组件接收到新的props或者state时被调用。在初始化时或者使用forceUpdate时不被调用。可以在你确认不需要更新组件时使用。</li>
+<li>componentWillUpdate在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。</li>
+<li>componentDidUpdate 在组件完成更新后立即调用。在初始化时不会被调用。</li>
+<li>componentWillUnmount在组件从 DOM 中移除的时候立刻被调用。</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/05/23/react高阶组件/" class="prev">PREV</a><a href="/2018/05/22/Record/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'seansun';
+var disqus_identifier = '2018/05/23/dva/';
+var disqus_title = 'dva';
+var disqus_url = 'http://yoursite.com/2018/05/23/dva/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//seansun.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">or_so</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p><div id="footer"><script src="text/javascript">var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "https://hm.baidu.com/hm.js?ccc9fee7608be2c23f25111be03d20fe";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();</script></div></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
