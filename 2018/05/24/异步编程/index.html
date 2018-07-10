@@ -1,188 +1,34 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="X-UA-Compatible" content="IE=edge">
-    <title> JavaScript异步编程 · or_so</title>
-    <meta name="description" content="JavaScript异步编程 - or_so">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="/favicon.png">
-    <link rel="stylesheet" href="/css/apollo.css">
-    <link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="or_so">
-</head>
-
-<body>
-    <div class="wrap">
-        <header>
-            <a href="/" class="logo-link">
-                <img src="/favicon.png" alt="logo">
-            </a>
-            <ul class="nav nav-list">
-                <li class="nav-list-item">
-                    <a href="/" target="_self" class="nav-list-link">BLOG</a>
-                </li>
-                <li class="nav-list-item">
-                    <a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a>
-                </li>
-                <li class="nav-list-item">
-                    <a href="http://www.cnblogs.com/mxs-blog/" target="_blank" class="nav-list-link">随笔</a>
-                </li>
-                <li class="nav-list-item">
-                    <a href="https://github.com/mxszs" target="_blank" class="nav-list-link">GITHUB</a>
-                </li>
-                <li class="nav-list-item">
-                    <a href="/atom.xml" target="_self" class="nav-list-link">RSS</a>
-                </li>
-            </ul>
-        </header>
-        <main class="container">
-            <div class="post">
-                <article class="post-block">
-                    <h1 class="post-title">JavaScript异步编程</h1>
-                    <div class="post-info">May 24, 2018</div>
-                    <div class="post-content">
-                        <blockquote>
-                            <p>js是一门单线程语言，异步编程对js语言来说就显得尤为重要</p>
-                        </blockquote>
-                        <p>现在实现异步编程的方式基本上有四种</p>
-                        <ul>
-                            <li>回调函数</li>
-                            <li>Promise函数</li>
-                            <li>Generator函数</li>
-                            <li>async/await</li>
-                        </ul>
-                        <h5 id="回调函数">
-                            <a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h5>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">比如我们去请求一个接口，当请求完成后执行下一个请求</span><br><span class="line"></span><br><span class="line">this.data(fetch(&apos;xxx&apos;,(res) =&gt; &#123;</span><br><span class="line">    this.dataInfo(fetch(&apos;yyy&apos;), (res) =&gt; &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;))</span><br><span class="line">如果还有更多的请求操作，就会出现多重嵌套。代码很快就会乱成一团，这种情况就是“回调地狱”（callback hell）。</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <h5 id="Promise函数">
-                            <a href="#Promise函数" class="headerlink" title="Promise函数"></a>Promise函数</h5>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">于是，我们提出了Promise函数，它将回调函数的嵌套，改成了链式调用。写法如下：</span><br><span class="line"></span><br><span class="line">let promise = new Promise((resolve, reject) =&gt; &#123;</span><br><span class="line">  this.data(resolve)</span><br><span class="line">&#125;)</span><br><span class="line">.then(() =&gt; this.dataInfo())</span><br><span class="line">.catch(() =&gt; &#123; console.log(&quot;Error&quot;) &#125;)</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Promise的写法只是回调函数的改进，使用then方法，只是让异步任务的两段执行更清楚而已。Promise的最大问题是代码冗余，</span><br><span class="line">请求任务多时，一堆的then，也使得原来的语义变得很不清楚，但是它的状态及其稳定</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <h5 id="Generator函数">
-                            <a href="#Generator函数" class="headerlink" title="Generator函数"></a>Generator函数</h5>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">Generator 函数是一个普通函数，但是有两个特征。</span><br><span class="line">1. function关键字与函数名之间有一个星号；</span><br><span class="line">2. 函数体内部使用yield表达式，定义不同的内部状态</span><br><span class="line"></span><br><span class="line">function* helloWorldGenerator() &#123;</span><br><span class="line">  yield &apos;hello&apos;;</span><br><span class="line">  yield &apos;world&apos;;</span><br><span class="line">  return &apos;ending&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const hw = helloWorldGenerator();</span><br><span class="line">上面代码定义了一个 Generator 函数helloWorldGenerator，它内部有两个yield表达式（hello和world），</span><br><span class="line">即该函数有三个状态：hello，world 和 return 语句（结束执行）。Generator 函数的调用方法与普通函数一样，也是在函数名后面加上一对圆括号。</span><br><span class="line">不同的是，调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象，</span><br><span class="line">必须调用遍历器对象的next方法，使得指针移向下一个状态。也就是说，每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，</span><br><span class="line">直到遇到下一个yield表达式（或return语句）为止。换言之，Generator 函数是分段执行的，yield表达式是暂停执行的标记，而next方法可以恢复执行。上述代码分步执行如下：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;hello&apos;, done: false &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;world&apos;, done: false &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;ending&apos;, done: true &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: undefined, done: true &#125;</span><br><span class="line"></span><br><span class="line">Generator函数的机制更符合我们理解的异步编程思想。</span><br><span class="line"></span><br><span class="line">用户登录的例子，我们用Generator来写，如下：</span><br><span class="line"></span><br><span class="line">let gen = function* () &#123;</span><br><span class="line">  const f1 = yield this.data()</span><br><span class="line">  const f2 = yield this.dataInfo()</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">虽然Generator将异步操作表示得很简洁，但是流程管理却不方便（即何时执行第一阶段、何时执行第二阶段)</span><br><span class="line">然后出现了 async/await</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <h5 id="async-await">
-                            <a href="#async-await" class="headerlink" title="async/await"></a>async/await</h5>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">async function asyncFunc(params) &#123;</span><br><span class="line">  const result1 = await this.login()</span><br><span class="line">  const result2 = await this.getInfo()</span><br><span class="line">&#125;</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <p>异步函数存在以下四种使用形式：</p>
-                        <ol>
-                            <li>函数声明： async function foo() {}</li>
-                            <li>函数表达式： const foo = async function() {}</li>
-                            <li>对象的方式： let obj = { async foo() {} }</li>
-                            <li>箭头函数： const foo = async () =&gt; {}</li>
-                        </ol>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">对单个异步处理</span><br><span class="line">data = async (xxx) =&gt; &#123;</span><br><span class="line">    const res = await fetch(`xxx`);</span><br><span class="line">&#125;</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">对错误的处理：</span><br><span class="line">asyncFunc =  async () =&gt; &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    await otherAsyncFunc();</span><br><span class="line">  &#125; catch (err) &#123;</span><br><span class="line">    console.error(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <figure class="highlight plain">
-                            <table>
-                                <tr>
-                                    <td class="gutter">
-                                        <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
-                                    </td>
-                                    <td class="code">
-                                        <pre><span class="line">按顺序处理多个异步结果：</span><br><span class="line">asyncFunc = async () =&gt; &#123;</span><br><span class="line">  const result1 = await otherAsyncFunc1();</span><br><span class="line">  console.log(result1);</span><br><span class="line">  const result2 = await otherAsyncFunc2();</span><br><span class="line">  console.log(result2);</span><br><span class="line">&#125;</span><br></pre>
-                                    </td>
-                                </tr>
-                            </table>
-                        </figure>
-                        <p>
-                            <a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">阮一峰es6</a>
-                        </p>
-                    </div>
-                </article>
-            </div>
-        </main>
-        <footer>
-            <div class="paginator">
-                <a href="/2018/05/23/react高阶组件/" class="next">NEXT</a>
-            </div>
-            <div id="disqus_thread"></div>
-            <script>var disqus_shortname = 'seansun';
-                var disqus_identifier = '2018/05/24/异步编程/';
-                var disqus_title = 'JavaScript异步编程';
-                var disqus_url = 'http://yoursite.com/2018/05/24/异步编程/';
-                (function () {
-                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                })();</script>
-            <script id="dsq-count-scr" src="//seansun.disqus.com/count.js" async></script>
-            <div class="copyright">
-                <p>© 2015 - 2018
-                    <a href="http://yoursite.com">or_so</a>, powered by
-                    <a href="https://hexo.io/" target="_blank">Hexo</a> and
-                    <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p>
-            </div>
-        </footer>
-    </div>
-    <script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW"
-        crossorigin="anonymous"></script>
-</body>
-
-</html>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> JavaScript异步编程 · or_so</title><meta name="description" content="JavaScript异步编程 - or_so"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="or_so"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://www.cnblogs.com/mxs-blog/" target="_blank" class="nav-list-link">随笔</a></li><li class="nav-list-item"><a href="https://github.com/mxszs" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">JavaScript异步编程</h1><div class="post-info">May 24, 2018</div><div class="post-content"><blockquote>
+<p>js是一门单线程语言，异步编程对js语言来说就显得尤为重要</p>
+</blockquote>
+<p>现在实现异步编程的方式基本上有四种</p>
+<ul>
+<li>回调函数</li>
+<li>Promise函数</li>
+<li>Generator函数</li>
+<li>async/await</li>
+</ul>
+<h5 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">比如我们去请求一个接口，当请求完成后执行下一个请求</span><br><span class="line"></span><br><span class="line">this.data(fetch(&apos;xxx&apos;,(res) =&gt; &#123;</span><br><span class="line">    this.dataInfo(fetch(&apos;yyy&apos;), (res) =&gt; &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;))</span><br><span class="line">如果还有更多的请求操作，就会出现多重嵌套。代码很快就会乱成一团，这种情况就是“回调地狱”（callback hell）。</span><br></pre></td></tr></table></figure>
+<h5 id="Promise函数"><a href="#Promise函数" class="headerlink" title="Promise函数"></a>Promise函数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">于是，我们提出了Promise函数，它将回调函数的嵌套，改成了链式调用。写法如下：</span><br><span class="line"></span><br><span class="line">let promise = new Promise((resolve, reject) =&gt; &#123;</span><br><span class="line">  this.data(resolve)</span><br><span class="line">&#125;)</span><br><span class="line">.then(() =&gt; this.dataInfo())</span><br><span class="line">.catch(() =&gt; &#123; console.log(&quot;Error&quot;) &#125;)</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Promise的写法只是回调函数的改进，使用then方法，只是让异步任务的两段执行更清楚而已。Promise的最大问题是代码冗余，</span><br><span class="line">请求任务多时，一堆的then，也使得原来的语义变得很不清楚，但是它的状态及其稳定</span><br></pre></td></tr></table></figure>
+<h5 id="Generator函数"><a href="#Generator函数" class="headerlink" title="Generator函数"></a>Generator函数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Generator 函数是一个普通函数，但是有两个特征。</span><br><span class="line">1. function关键字与函数名之间有一个星号；</span><br><span class="line">2. 函数体内部使用yield表达式，定义不同的内部状态</span><br><span class="line"></span><br><span class="line">function* helloWorldGenerator() &#123;</span><br><span class="line">  yield &apos;hello&apos;;</span><br><span class="line">  yield &apos;world&apos;;</span><br><span class="line">  return &apos;ending&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const hw = helloWorldGenerator();</span><br><span class="line">上面代码定义了一个 Generator 函数helloWorldGenerator，它内部有两个yield表达式（hello和world），</span><br><span class="line">即该函数有三个状态：hello，world 和 return 语句（结束执行）。Generator 函数的调用方法与普通函数一样，也是在函数名后面加上一对圆括号。</span><br><span class="line">不同的是，调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象，</span><br><span class="line">必须调用遍历器对象的next方法，使得指针移向下一个状态。也就是说，每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，</span><br><span class="line">直到遇到下一个yield表达式（或return语句）为止。换言之，Generator 函数是分段执行的，yield表达式是暂停执行的标记，而next方法可以恢复执行。上述代码分步执行如下：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;hello&apos;, done: false &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;world&apos;, done: false &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: &apos;ending&apos;, done: true &#125;</span><br><span class="line"></span><br><span class="line">hw.next()</span><br><span class="line">// &#123; value: undefined, done: true &#125;</span><br><span class="line"></span><br><span class="line">Generator函数的机制更符合我们理解的异步编程思想。</span><br><span class="line"></span><br><span class="line">用户登录的例子，我们用Generator来写，如下：</span><br><span class="line"></span><br><span class="line">let gen = function* () &#123;</span><br><span class="line">  const f1 = yield this.data()</span><br><span class="line">  const f2 = yield this.dataInfo()</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">虽然Generator将异步操作表示得很简洁，但是流程管理却不方便（即何时执行第一阶段、何时执行第二阶段)</span><br><span class="line">然后出现了 async/await</span><br></pre></td></tr></table></figure>
+<h5 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">async function asyncFunc(params) &#123;</span><br><span class="line">  const result1 = await this.login()</span><br><span class="line">  const result2 = await this.getInfo()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>异步函数存在以下四种使用形式：</p>
+<ol>
+<li>函数声明： async function foo() {}</li>
+<li>函数表达式： const foo = async function() {}</li>
+<li>对象的方式： let obj = { async foo() {} }</li>
+<li>箭头函数： const foo = async () =&gt; {}</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">对单个异步处理</span><br><span class="line">data = async (xxx) =&gt; &#123;</span><br><span class="line">    const res = await fetch(`xxx`);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">对错误的处理：</span><br><span class="line">asyncFunc =  async () =&gt; &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    await otherAsyncFunc();</span><br><span class="line">  &#125; catch (err) &#123;</span><br><span class="line">    console.error(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">按顺序处理多个异步结果：</span><br><span class="line">asyncFunc = async () =&gt; &#123;</span><br><span class="line">  const result1 = await otherAsyncFunc1();</span><br><span class="line">  console.log(result1);</span><br><span class="line">  const result2 = await otherAsyncFunc2();</span><br><span class="line">  console.log(result2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">阮一峰es6</a></p>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/05/23/react高阶组件/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'seansun';
+var disqus_identifier = '2018/05/24/异步编程/';
+var disqus_title = 'JavaScript异步编程';
+var disqus_url = 'http://yoursite.com/2018/05/24/异步编程/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//seansun.disqus.com/count.js" async></script><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">or_so</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
